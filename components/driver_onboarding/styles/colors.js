@@ -1,8 +1,8 @@
 export const colors = {
-  primary: '#FF5722',
-  bgGradient: ['#FFF3E0', '#FFE0B2'],
-  textDark: '#333333',
+  primary: '#007BFF', // OK2GO primary color
+  textDark: '#1A1A1A',
   textLight: '#FFFFFF',
-  white: '#FFFFFF',
-  gray: '#9E9E9E',
+  background: '#FFFFFF',
+  grey: '#F0F0F0',
+  link: '#007BFF',
 };

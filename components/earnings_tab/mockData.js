@@ -1,4 +1,13 @@
 // Mock data for driver bookings.
+export const mockBookings = [
+  { id: '1', date: '2023-10-26', amount: 15.50, tripCount: 1, timeOnline: '45m' },
+  { id: '2', date: '2023-10-25', amount: 120.75, tripCount: 8, timeOnline: '6h 30m' },
+  { id: '3', date: '2023-10-24', amount: 85.20, tripCount: 6, timeOnline: '5h 15m' },
+  { id: '4', date: '2023-10-23', amount: 95.00, tripCount: 7, timeOnline: '5h 45m' },
+  { id: '5', date: '2023-10-22', amount: 0, tripCount: 0, timeOnline: '0m' },
+  { id: '6', date: '2023-10-21', amount: 150.30, tripCount: 10, timeOnline: '8h 0m' },
+  { id: '7', date: '2023-10-20', amount: 110.00, tripCount: 9, timeOnline: '7h 15m' },
+];
 // Used for development and testing purposes.
 
 export const completedBookings = [
