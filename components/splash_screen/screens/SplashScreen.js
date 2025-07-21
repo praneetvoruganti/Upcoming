@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { splashService } from '../services/splashService';
 import SplashLogo from '../components/SplashLogo';
-import LoadingIndicator from '../components/LoadingIndicator';
+
 import { splashStyles } from '../styles/splashStyles';
 
 const SplashScreen = ({ onReady }) => {
@@ -31,7 +31,7 @@ const SplashScreen = ({ onReady }) => {
   return (
     <View style={splashStyles.container}>
       <SplashLogo />
-      <LoadingIndicator />
+
     </View>
   );
 };

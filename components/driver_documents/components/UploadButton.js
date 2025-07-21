@@ -1,35 +1,89 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { colors, spacing, typography } from '../styles/driverDocStyles';
 
-const statusStyles = {
-  'New': { backgroundColor: '#E3F2FD', textColor: '#0D47A1', message: 'Welcome! Please upload your documents to get started.' },
-  'Pending': { backgroundColor: '#FFF9C4', textColor: '#F57F17', message: 'Your documents are under review. We will notify you of any updates.' },
-  'Approved': { backgroundColor: '#C8E6C9', textColor: '#1B5E20', message: 'Congratulations! Your profile is approved.' },
-  'Conditionally Approved': { backgroundColor: '#FFCCBC', textColor: '#BF360C', message: 'Action Required: Some documents need your attention.' },
-  'Rejected': { backgroundColor: '#FFCDD2', textColor: '#B71C1C', message: 'Your application has been rejected. Please review the comments.' },
+const statusConfig = {
+  New: {
+    icon: '👋',
+    message: 'Welcome! Please upload your documents to get started.',
+    style: styles.bannerInfo,
+    textStyle: styles.bannerInfoText,
+  },
+  Pending: {
+    icon: '⏳',
+    message: 'Your documents are under review. We will notify you shortly.',
+    style: styles.bannerWarning,
+    textStyle: styles.bannerWarningText,
+  },
+  Approved: {
+    icon: '✅',
+    message: 'Congratulations! Your profile is approved and you are ready to drive.',
+    style: styles.bannerSuccess,
+    textStyle: styles.bannerSuccessText,
+  },
+  'Conditionally Approved': {
+    icon: '⚠️',
+    message: 'Action Required: Some documents need your attention.',
+    style: styles.bannerWarning,
+    textStyle: styles.bannerWarningText,
+  },
+  Rejected: {
+    icon: '🚫',
+    message: 'Your application has been rejected. Please review the comments.',
+    style: styles.bannerDanger,
+    textStyle: styles.bannerDangerText,
+  },
 };
 
 const StatusBanner = ({ status }) => {
-  const { backgroundColor, textColor, message } = statusStyles[status] || statusStyles['New'];
+  const { icon, message, style, textStyle } = statusConfig[status] || statusConfig.New;
 
   return (
-    <View style={[styles.banner, { backgroundColor }]}>
-      <Text style={[styles.bannerText, { color: textColor }]}>{message}</Text>
+    <View style={[styles.banner, style]}>
+      <Text style={styles.icon}>{icon}</Text>
+      <Text style={[styles.bannerText, textStyle]}>{message}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   banner: {
-    padding: 16,
-    margin: 16,
-    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.medium,
+    borderRadius: spacing.borderRadius,
+    marginHorizontal: spacing.medium,
+    marginTop: spacing.medium,
+    borderWidth: 1,
+  },
+  bannerInfo: {
+    backgroundColor: colors.infoMuted,
+    borderColor: colors.info,
+  },
+  bannerSuccess: {
+    backgroundColor: colors.successMuted,
+    borderColor: colors.success,
+  },
+  bannerWarning: {
+    backgroundColor: colors.warningMuted,
+    borderColor: colors.warning,
+  },
+  bannerDanger: {
+    backgroundColor: colors.dangerMuted,
+    borderColor: colors.danger,
+  },
+  icon: {
+    fontSize: typography.sizes.large,
+    marginRight: spacing.medium,
   },
   bannerText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    ...typography.styles.body,
+    flex: 1, // Allow text to wrap
   },
+  bannerInfoText: { color: colors.info },
+  bannerSuccessText: { color: colors.success },
+  bannerWarningText: { color: colors.warning },
+  bannerDangerText: { color: colors.danger },
 });
 
 export default StatusBanner;

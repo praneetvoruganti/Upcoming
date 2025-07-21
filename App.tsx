@@ -8,6 +8,7 @@ import SplashScreen from './components/splash_screen';
 import EarningsScreen from './components/earnings_tab';
 import DriverDocumentsScreen from './components/driver_documents';
 import DriverOnboarding from './components/driver_onboarding';
+import HappeningPlaces from './components/riders/happening_places';
 import { mockBookings } from './components/earnings_tab/mockData';
 
 // Define the ParamList for the drawer navigator
@@ -16,6 +17,7 @@ type RootDrawerParamList = {
   Earnings: undefined;
   DriverDocuments: undefined;
   DriverOnboarding: undefined;
+  HappeningPlaces: undefined;
 };
 
 // Define the type for the wrapper component's props
@@ -54,6 +56,19 @@ const DriverDocumentsScreenWrapper = () => (
   <DriverDocumentsScreen onSave={() => console.log('Save action triggered')} />
 );
 
+// Define the type for the Happening Places wrapper's props
+type HappeningPlacesWrapperProps = DrawerScreenProps<RootDrawerParamList, 'HappeningPlaces'>;
+
+const HappeningPlacesWrapper: React.FC<HappeningPlacesWrapperProps> = ({ navigation }) => {
+  const handleBook = (serviceType: string, placeId: string) => {
+    console.log(`Booking ${serviceType} service for place ${placeId}`);
+    // Here you would integrate with your actual booking flow
+    // e.g., navigation.navigate('BookingScreen', { serviceType, placeId });
+  };
+
+  return <HappeningPlaces onBook={handleBook} navigation={navigation} />;
+};
+
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 const App = () => {
@@ -70,6 +85,7 @@ const App = () => {
         <Drawer.Screen name="Earnings" component={EarningsScreenWrapper} />
         <Drawer.Screen name="DriverDocuments" component={DriverDocumentsScreenWrapper} options={{ title: 'Driver Documents' }} />
         <Drawer.Screen name="DriverOnboarding" component={DriverOnboardingWrapper} options={{ title: 'Driver Onboarding (Test)' }} />
+        <Drawer.Screen name="HappeningPlaces" component={HappeningPlacesWrapper} options={{ title: 'Happening Places' }} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

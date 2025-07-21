@@ -5,7 +5,7 @@ export const splashStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFC107', // A vibrant yellow
   },
   logoContainer: {
     alignItems: 'center',
