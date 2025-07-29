@@ -9,6 +9,7 @@ import { colors, spacing, typography, elevation, getCategoryColor, formatDistanc
 // Get screen dimensions for responsive layouts
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - spacing.medium * 2;
+const COMPACT_IMAGE_SIZE = 80; // Smaller, square image for horizontal layout
 
 // Enhanced placeholder for when no places are found
 const NoPlacesFound = () => (
@@ -21,111 +22,88 @@ const NoPlacesFound = () => (
   )
 );
 
-// Premium place card component with enhanced UI elements
+// Compact, Action-Oriented PlaceCard component
 const PlaceCard = ({ place, onCardTap }) => {
   const [isPressed, setIsPressed] = useState(false);
-  const categoryColor = getCategoryColor(place.categoryId) || colors.primary;
-  const categoryName = getCategoryDisplayName(place.categoryId);
+  const categoryColor = getCategoryColor(place.category);
+  const categoryName = getCategoryDisplayName(place.category);
   
-  // Handle badges display
-  const renderBadges = () => {
-    if (!place.badges || place.badges.length === 0) return null;
+  // Get the most relevant property for quick display
+  const getKeyProperty = () => {
+    if (!place.properties) return null;
     
-    return React.createElement(View, { style: styles.badgeContainer },
-      place.badges.map((badge, index) => 
-        React.createElement(View, 
-          { 
-            key: `badge-${index}`, 
-            style: [styles.badge, index > 0 && { marginLeft: spacing.small }] 
-          },
-          React.createElement(Text, { style: styles.badgeText }, 
-            badge === 'hourly' ? '⏱️ Hourly' : '🔄 C2C'
-          )
-        )
-      )
-    );
-  };
-  
-  // Handle additional property rows
-  const renderPropertyRows = () => {
-    if (!place.additionalProps) return null;
-    
-    const propertyIcons = {
-      popularity: '👥',
-      estimatedTime: '⏱️',
-      bestTime: '🕒',
-      openHours: '🕙',
-      busyTimes: '⏰',
+    const propertyPriority = {
       priceRange: '💰',
+      estimatedTime: '⏰',
+      bestTime: '🕒',
+      openHours: '🕒',
       cuisine: '🍽️',
-      stores: '🛍️',
-      facilities: '🏬',
-      terminals: '🛫',
+      stores: '🏪',
+      facilities: '🎯',
+      terminals: '✈️',
       platforms: '🚉',
-      peakHours: '📊',
       stars: '⭐',
-      roomTypes: '🛏️',
-      amenities: '🛁'
     };
     
-    return Object.entries(place.additionalProps).map(([key, value], index) => {
-      if (!value) return null;
-      
-      return React.createElement(View, 
-        { 
-          key: `prop-${index}`,
-          style: styles.propertyRow 
-        },
-        React.createElement(Text, { style: styles.propertyIcon }, propertyIcons[key] || '•'),
-        React.createElement(Text, { style: styles.propertyLabel }, key.charAt(0).toUpperCase() + key.slice(1) + ':'),
-        React.createElement(Text, { style: styles.propertyValue }, value)
-      );
-    });
+    for (const [key, icon] of Object.entries(propertyPriority)) {
+      if (place.properties[key]) {
+        return { key, value: place.properties[key], icon };
+      }
+    }
+    return null;
   };
+  
+  const keyProperty = getKeyProperty();
 
   return React.createElement(TouchableOpacity, {
-    style: [styles.card, isPressed && styles.cardPressed],
+    style: [styles.compactCard, isPressed && styles.cardPressed],
     onPress: () => onCardTap(place.id),
     onPressIn: () => setIsPressed(true),
     onPressOut: () => setIsPressed(false),
-    activeOpacity: 0.9
+    activeOpacity: 0.95
   },
-    // Card Image with Overlay
-    React.createElement(ImageBackground, 
-      { 
-        source: { uri: place.imageUrl }, 
-        style: styles.cardImage,
-        imageStyle: { borderTopLeftRadius: spacing.cardBorderRadius, borderTopRightRadius: spacing.cardBorderRadius }
-      },
-      // Rating overlay
-      React.createElement(View, { style: styles.ratingContainer },
-        React.createElement(Text, { style: styles.ratingText }, `${place.rating}`),
-        React.createElement(Text, { style: styles.ratingIcon }, '⭐'),
-        React.createElement(Text, { style: styles.ratingCount }, `(${place.ratingCount})`)
-      ),
-      // Badge overlay
-      renderBadges()
+    // Left side: Compact square image with rating overlay
+    React.createElement(View, { style: styles.imageSection },
+      React.createElement(ImageBackground, 
+        { 
+          source: { uri: place.imageUrl }, 
+          style: styles.compactImage,
+          imageStyle: { borderRadius: spacing.small }
+        },
+        React.createElement(View, { style: styles.compactRating },
+          React.createElement(Text, { style: styles.ratingValue }, `${place.rating}`),
+          React.createElement(Text, { style: styles.starIcon }, '⭐')
+        )
+      )
     ),
-    // Card Body
-    React.createElement(View, { style: styles.cardBody },
-      // Title and Category
-      React.createElement(View, { style: styles.cardHeader },
-        React.createElement(Text, { style: styles.cardTitle, numberOfLines: 1 }, place.name),
-        React.createElement(View, { style: [styles.categoryBadge, { backgroundColor: categoryColor }] },
-          React.createElement(Text, { style: styles.categoryText }, categoryName)
+    
+    // Right side: Content and CTA
+    React.createElement(View, { style: styles.contentSection },
+      // Top row: Title and Category
+      React.createElement(View, { style: styles.titleRow },
+        React.createElement(Text, { style: styles.compactTitle, numberOfLines: 1 }, place.name),
+        React.createElement(View, { style: [styles.compactCategory, { backgroundColor: categoryColor }] },
+          React.createElement(Text, { style: styles.categoryLabel }, categoryName)
         )
       ),
-      // Description
-      React.createElement(Text, { style: styles.cardDescription, numberOfLines: 2 }, place.description),
-      // Property rows
-      renderPropertyRows(),
-      // Footer with distance
-      React.createElement(View, { style: styles.cardFooter },
-        React.createElement(View, { style: styles.distanceContainer },
+      
+      // Middle: Key property or description
+      keyProperty ? 
+        React.createElement(View, { style: styles.propertyInfo },
+          React.createElement(Text, { style: styles.propertyIcon }, keyProperty.icon),
+          React.createElement(Text, { style: styles.propertyText, numberOfLines: 1 }, keyProperty.value)
+        ) :
+        React.createElement(Text, { style: styles.compactDescription, numberOfLines: 1 }, place.description),
+      
+      // Bottom: Distance and prominent CTA
+      React.createElement(View, { style: styles.actionRow },
+        React.createElement(View, { style: styles.distanceInfo },
           React.createElement(Text, { style: styles.distanceIcon }, '📍'),
-          React.createElement(Text, { style: styles.distanceText }, formatDistance(place.distance))
+          React.createElement(Text, { style: styles.distanceValue }, formatDistance(place.distance))
         ),
-        React.createElement(Text, { style: styles.bookNowText }, 'See Booking Options →')
+        React.createElement(View, { style: styles.ctaButton },
+          React.createElement(Text, { style: styles.ctaText }, 'Book Now')
+        )
       )
     )
   );
@@ -211,53 +189,139 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
-  // Card styles
-  card: {
+  // Compact Card styles
+  compactCard: {
     backgroundColor: colors.card,
-    borderRadius: spacing.cardBorderRadius,
-    marginBottom: spacing.large,
+    borderRadius: spacing.borderRadius,
+    marginBottom: spacing.medium,
     overflow: 'hidden',
     width: CARD_WIDTH,
+    flexDirection: 'row',
+    height: 100, // Fixed compact height
     ...elevation.card,
   },
   cardPressed: {
     transform: [{ scale: 0.98 }],
     ...elevation.z1,
   },
-  cardImage: {
-    width: '100%',
-    height: spacing.cardImageHeight,
+  imageSection: {
+    width: COMPACT_IMAGE_SIZE,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.small,
+  },
+  compactImage: {
+    width: COMPACT_IMAGE_SIZE - spacing.small * 2,
+    height: COMPACT_IMAGE_SIZE - spacing.small * 2,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  contentSection: {
+    flex: 1,
+    paddingVertical: spacing.small,
+    paddingHorizontal: spacing.medium,
     justifyContent: 'space-between',
   },
-  cardBody: {
-    padding: spacing.cardPadding,
-  },
   
-  // Rating styles
-  ratingContainer: {
+  // Compact Rating styles
+  compactRating: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-    borderRadius: spacing.small,
-    paddingHorizontal: spacing.small,
-    paddingVertical: spacing.xsmall,
-    margin: spacing.medium,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    margin: 4,
   },
-  ratingText: {
+  ratingValue: {
     color: colors.text.light,
     fontWeight: typography.weights.bold,
-    fontSize: typography.sizes.regular,
+    fontSize: 10,
     marginRight: 2,
   },
-  ratingIcon: {
-    fontSize: typography.sizes.small,
-    marginRight: spacing.xsmall,
+  starIcon: {
+    fontSize: 8,
   },
-  ratingCount: {
+  
+  // Compact Content styles
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.xsmall,
+  },
+  compactTitle: {
+    ...typography.styles.subtitle,
+    color: colors.text.primary,
+    fontSize: typography.sizes.regular,
+    fontWeight: typography.weights.semibold,
+    flex: 1,
+    marginRight: spacing.small,
+  },
+  compactCategory: {
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+  },
+  categoryLabel: {
+    ...typography.styles.caption,
     color: colors.text.light,
+    fontSize: 10,
+    fontWeight: typography.weights.medium,
+  },
+  propertyInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.xsmall,
+  },
+  propertyIcon: {
+    fontSize: 12,
+    marginRight: spacing.xsmall,
+    width: 14,
+  },
+  propertyText: {
+    ...typography.styles.caption,
+    color: colors.text.secondary,
     fontSize: typography.sizes.small,
-    opacity: 0.9,
+    flex: 1,
+  },
+  compactDescription: {
+    ...typography.styles.caption,
+    color: colors.text.secondary,
+    fontSize: typography.sizes.small,
+    marginBottom: spacing.xsmall,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  distanceInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  distanceIcon: {
+    fontSize: 10,
+    marginRight: 4,
+  },
+  distanceValue: {
+    ...typography.styles.caption,
+    color: colors.text.secondary,
+    fontSize: typography.sizes.small,
+  },
+  ctaButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  ctaText: {
+    ...typography.styles.button,
+    color: colors.text.light,
+    fontSize: 12,
+    fontWeight: typography.weights.semibold,
   },
   
   // Badge styles

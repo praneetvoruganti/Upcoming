@@ -81,12 +81,6 @@ const CategoryFilter = (props) => {
                 ] 
               },
               category.label
-            ),
-            // Selected indicator dot
-            isSelected && React.createElement(
-              View,
-              { style: styles.selectedIndicator },
-              null
             )
           )
         })
@@ -97,67 +91,61 @@ const CategoryFilter = (props) => {
 
 // Premium category colors now come directly from the happeningStyles.js getCategoryColor function
 
-// Premium styles for the component
+// Compact, Premium styles for the component
 const styles = StyleSheet.create({
   wrapper: {
-    paddingVertical: spacing.medium,
+    paddingVertical: spacing.small,
     backgroundColor: colors.background,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: colors.divider,
-    ...elevation.z1
   },
   container: {
-    height: spacing.filterBarHeight,
+    height: 44, // Much more compact
   },
   scrollContent: {
     alignItems: 'center',
     paddingHorizontal: spacing.medium,
-    paddingRight: spacing.xlarge, // Extra padding for end of scroll
+    paddingRight: spacing.large, // Reduced padding
   },
   categoryButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: spacing.medium,
-    paddingVertical: spacing.small,
-    marginRight: spacing.medium,
-    borderRadius: 28,
-    height: 56,
-    minWidth: 100,
+    paddingHorizontal: spacing.small + 2, // Tighter horizontal padding
+    paddingVertical: 6, // Tighter vertical padding
+    marginRight: spacing.small, // Reduced margin between buttons
+    borderRadius: 20, // Smaller border radius for compact look
+    height: 36, // Much more compact height
+    minWidth: 70, // Reduced minimum width
   },
   unselectedButton: {
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.divider,
-    ...elevation.z1
+    opacity: 0.9,
   },
   selectedButton: {
-    backgroundColor: colors.primary,
-    ...elevation.z2
+    borderWidth: 1,
+    borderColor: 'transparent',
+    opacity: 1,
+    transform: [{ scale: 1.02 }], // Subtle scale effect instead of shadow
   },
   categoryIcon: {
-    fontSize: 18,
-    marginRight: spacing.small,
+    fontSize: 14, // Smaller icon
+    marginRight: 4, // Tighter spacing
   },
   categoryText: {
-    fontSize: typography.sizes.regular,
-    fontWeight: typography.weights.semibold,
-    marginLeft: spacing.xsmall,
+    fontSize: typography.sizes.small, // Smaller text
+    fontWeight: typography.weights.medium, // Less bold
   },
   unselectedText: {
     color: colors.text.secondary,
   },
   selectedText: {
     color: colors.text.light,
+    fontWeight: typography.weights.semibold, // Slightly bolder when selected
   },
-  selectedIndicator: {
-    position: 'absolute',
-    bottom: spacing.xsmall,
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.text.light
-  }
+  // Remove the selected indicator for cleaner design
 });
 
 export default CategoryFilter;

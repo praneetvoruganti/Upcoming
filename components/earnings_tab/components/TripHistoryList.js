@@ -30,8 +30,8 @@ const TripHistoryItem = ({ item, currency }) => {
         </View>
       </View>
       <View style={styles.tripLocations}>
-        <Text style={styles.locationText} numberOfLines={1}>{`From: ${item.pickup.add}`}</Text>
-        <Text style={styles.locationText} numberOfLines={1}>{`To: ${item.drop.add}`}</Text>
+        <Text style={styles.locationText} numberOfLines={1}>{`From: ${item.pickup?.add || 'Address not available'}`}</Text>
+        <Text style={styles.locationText} numberOfLines={1}>{`To: ${item.drop?.add || 'Address not available'}`}</Text>
       </View>
       {isExpanded && (
         <View style={styles.earningsBreakdown}>

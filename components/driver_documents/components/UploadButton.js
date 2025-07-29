@@ -2,40 +2,40 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors, spacing, typography } from '../styles/driverDocStyles';
 
-const statusConfig = {
-  New: {
-    icon: '👋',
-    message: 'Welcome! Please upload your documents to get started.',
-    style: styles.bannerInfo,
-    textStyle: styles.bannerInfoText,
-  },
-  Pending: {
-    icon: '⏳',
-    message: 'Your documents are under review. We will notify you shortly.',
-    style: styles.bannerWarning,
-    textStyle: styles.bannerWarningText,
-  },
-  Approved: {
-    icon: '✅',
-    message: 'Congratulations! Your profile is approved and you are ready to drive.',
-    style: styles.bannerSuccess,
-    textStyle: styles.bannerSuccessText,
-  },
-  'Conditionally Approved': {
-    icon: '⚠️',
-    message: 'Action Required: Some documents need your attention.',
-    style: styles.bannerWarning,
-    textStyle: styles.bannerWarningText,
-  },
-  Rejected: {
-    icon: '🚫',
-    message: 'Your application has been rejected. Please review the comments.',
-    style: styles.bannerDanger,
-    textStyle: styles.bannerDangerText,
-  },
-};
-
 const StatusBanner = ({ status }) => {
+  const statusConfig = {
+    New: {
+      icon: '👋',
+      message: 'Welcome! Please upload your documents to get started.',
+      style: styles.bannerInfo,
+      textStyle: styles.bannerInfoText,
+    },
+    Pending: {
+      icon: '⏳',
+      message: 'Your documents are under review. We will notify you shortly.',
+      style: styles.bannerWarning,
+      textStyle: styles.bannerWarningText,
+    },
+    Approved: {
+      icon: '✅',
+      message: 'Congratulations! Your profile is approved and you are ready to drive.',
+      style: styles.bannerSuccess,
+      textStyle: styles.bannerSuccessText,
+    },
+    'Conditionally Approved': {
+      icon: '⚠️',
+      message: 'Action Required: Some documents need your attention.',
+      style: styles.bannerWarning,
+      textStyle: styles.bannerWarningText,
+    },
+    Rejected: {
+      icon: '🚫',
+      message: 'Your application has been rejected. Please review the comments.',
+      style: styles.bannerDanger,
+      textStyle: styles.bannerDangerText,
+    },
+  };
+
   const { icon, message, style, textStyle } = statusConfig[status] || statusConfig.New;
 
   return (
