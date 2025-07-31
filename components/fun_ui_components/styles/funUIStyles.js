@@ -10,10 +10,11 @@ const colors = {
 const funUIStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'transparent',
     padding: 20,
+    paddingTop: 50,
   },
   text: {
     color: colors.black,
@@ -22,7 +23,6 @@ const funUIStyles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
     paddingVertical: 18,
-    paddingHorizontal: 40,
     borderRadius: 16,
     shadowColor: colors.primary,
     shadowOffset: {
@@ -32,7 +32,8 @@ const funUIStyles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 12,
     elevation: 8,
-    minWidth: 200,
+    width: '100%',
+    alignSelf: 'center',
   },
   buttonText: {
     color: colors.white,

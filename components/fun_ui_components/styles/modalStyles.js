@@ -136,8 +136,9 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: colors.black,
     borderRadius: 16,
     paddingVertical: 18,
-    paddingHorizontal: 24,
-    marginTop: 24,
+    marginTop: 16,
+    width: '100%',
+    alignSelf: 'center',
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
